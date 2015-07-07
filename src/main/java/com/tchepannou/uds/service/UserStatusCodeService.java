@@ -1,7 +1,7 @@
 package com.tchepannou.uds.service;
 
-import com.tchepannou.uds.domain.UserStatusCode;
+import com.tchepannou.uds.dto.UserStatusCodeListResponse;
 
-public interface UserStatusCodeService extends AbstractPersistentEnumService<UserStatusCode>{
-    UserStatusCode findDefault();
+public interface UserStatusCodeService {
+    UserStatusCodeListResponse findAll ();
 }

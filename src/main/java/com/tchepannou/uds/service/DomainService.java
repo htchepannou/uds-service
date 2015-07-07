@@ -1,18 +1,17 @@
 package com.tchepannou.uds.service;
 
-import com.tchepannou.uds.domain.Domain;
+import com.tchepannou.uds.dto.DomainListResponse;
 import com.tchepannou.uds.dto.DomainRequest;
-
-import java.util.List;
+import com.tchepannou.uds.dto.DomainResponse;
 
 public interface DomainService {
-    Domain findById(long id);
+    DomainResponse findById(long id);
 
-    List<Domain> findAll();
+    DomainListResponse findAll();
 
-    Domain create(DomainRequest request);
+    DomainResponse create(DomainRequest request);
 
-    Domain update(long id, DomainRequest domain);
+    DomainResponse update(long id, DomainRequest domain);
 
     void delete(long id);
 }

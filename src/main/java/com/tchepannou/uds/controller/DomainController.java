@@ -1,5 +1,4 @@
 package com.tchepannou.uds.controller;
-import com.tchepannou.uds.domain.Domain;
 import com.tchepannou.uds.dto.DomainListResponse;
 import com.tchepannou.uds.dto.DomainRequest;
 import com.tchepannou.uds.dto.DomainResponse;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @Api(basePath = "/domains", value = "Domains", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,28 +46,19 @@ public class DomainController extends AbstractController {
     @RequestMapping(method = RequestMethod.GET, value = "/{domainId}")
     @ApiOperation("Find a domain by ID")
     public DomainResponse findById(@PathVariable final long domainId) {
-        final Domain domain = domainService.findById(domainId);
-        return new DomainResponse.Builder()
-                .withDomain(domain)
-                .build();
+        return domainService.findById(domainId);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation("Find all the domains")
     public DomainListResponse findAll() {
-        final List<Domain> all = domainService.findAll();
-        return new DomainListResponse.Builder()
-                .withDomains(all)
-                .build();
+        return domainService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation("Create a new domain")
     public DomainResponse create(@RequestBody @Valid final DomainRequest request) {
-        Domain domain = domainService.create(request);
-        return new DomainResponse.Builder()
-                .withDomain(domain)
-                .build();
+        return domainService.create(request);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/{domainId}")
@@ -78,10 +67,7 @@ public class DomainController extends AbstractController {
             @PathVariable final long domainId,
             @Valid @RequestBody final DomainRequest request
     ) {
-        Domain domain = domainService.update(domainId, request);
-        return new DomainResponse.Builder()
-                .withDomain(domain)
-                .build();
+        return domainService.update(domainId, request);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{domainId}")

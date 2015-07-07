@@ -2,6 +2,7 @@ package com.tchepannou.uds.controller;
 
 import com.google.common.base.Joiner;
 import com.tchepannou.uds.dto.ErrorResponse;
+import com.tchepannou.uds.exception.BadRequestException;
 import com.tchepannou.uds.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,15 @@ public abstract class AbstractController {
     protected abstract Logger getLogger ();
 
     //-- Error Handlers
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleError(
+            final HttpServletRequest request,
+            final BadRequestException exception
+    ) {
+        return handleException(request, HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
+    }
+
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value= HttpStatus.NOT_FOUND)
     public ErrorResponse handleError(

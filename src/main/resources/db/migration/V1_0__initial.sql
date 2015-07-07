@@ -1,14 +1,3 @@
-CREATE TABLE t_domain(
-    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-
-    deleted BIT DEFAULT 0,
-    from_date DATETIME,
-    to_date DATETIME,
-
-    name VARCHAR(50) NOT NULL UNIQUE,
-    description VARCHAR(255)
-) engine=InnoDB;
-
 CREATE TABLE t_user_status_code(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
@@ -21,16 +10,16 @@ CREATE TABLE t_user_status_code(
 CREATE TABLE t_user(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
-    party_fk BIGINT NOT NULL REFERENCES t_party(id),
+    party_fk BIGINT NOT NULL,
 
     deleted BIT DEFAULT 0,
     from_date DATETIME,
     to_date DATETIME,
 
     login VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(50),
-    status CHAR(1)
+    password VARCHAR(50)
 );
+
 
 CREATE TABLE t_user_status (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -63,6 +52,19 @@ CREATE TABLE t_role_permission(
 );
 
 
+
+CREATE TABLE t_domain(
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+
+    deleted BIT DEFAULT 0,
+    from_date DATETIME,
+    to_date DATETIME,
+
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(255)
+) engine=InnoDB;
+
+
 CREATE TABLE t_domain_user(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
@@ -74,6 +76,8 @@ CREATE TABLE t_domain_user(
 
     UNIQUE(domain_fk, user_fk, role_fk)
 );
+
+
 
 CREATE TABLE t_access_token(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,

@@ -2,7 +2,9 @@ package com.tchepannou.uds.service.impl;
 
 import com.tchepannou.uds.dao.DomainDao;
 import com.tchepannou.uds.domain.Domain;
+import com.tchepannou.uds.dto.DomainListResponse;
 import com.tchepannou.uds.dto.DomainRequest;
+import com.tchepannou.uds.dto.DomainResponse;
 import com.tchepannou.uds.exception.DuplicateNameException;
 import com.tchepannou.uds.exception.NotFoundException;
 import com.tchepannou.uds.service.DomainService;
@@ -20,22 +22,22 @@ public class DomainServiceImpl implements DomainService {
 
     //-- DomainService overrides
     @Override
-    public Domain findById(final long id) {
-        Domain domain = domainDao.findById(id);
-        if (domain == null || domain.isDeleted()) {
-            throw new NotFoundException(id, Domain.class);
-        }
-        return domain;
+    public DomainResponse findById(final long id) {
+        return toDomainResponse(
+                find(id)
+        );
     }
 
     @Override
-    public List<Domain> findAll() {
-        return domainDao.findAll();
+    public DomainListResponse findAll() {
+        return toDomainListResponse(
+                domainDao.findAll()
+        );
     }
 
     @Override
     @Transactional
-    public Domain create(final DomainRequest request) {
+    public DomainResponse create(final DomainRequest request) {
         try {
             final Domain domain = new Domain ();
             domain.setName(request.getName());
@@ -43,7 +45,7 @@ public class DomainServiceImpl implements DomainService {
             domain.setFromDate(new Date());
 
             domainDao.create(domain);
-            return domain;
+            return toDomainResponse(domain);
         } catch (DuplicateKeyException e) {
             throw new DuplicateNameException(request.getName(), e);
         }
@@ -51,14 +53,14 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     @Transactional
-    public Domain update(final long id, final DomainRequest request) {
+    public DomainResponse update(final long id, final DomainRequest request) {
         try {
-            Domain domain = findById(id);
+            Domain domain = find(id);
             domain.setName(request.getName());
             domain.setDescription(request.getDescription());
 
             domainDao.update(domain);
-            return domain;
+            return toDomainResponse(domain);
         } catch (DuplicateKeyException e) {
             throw new DuplicateNameException(request.getName(), e);
         }
@@ -70,5 +72,26 @@ public class DomainServiceImpl implements DomainService {
         findById(id);       // Make sure that domain exists
 
         domainDao.delete(id);
+    }
+
+    //-- Private
+    private DomainResponse toDomainResponse(Domain domain){
+        return new DomainResponse.Builder()
+                .withDomain(domain)
+                .build();
+    }
+
+    private DomainListResponse toDomainListResponse(List<Domain> domains){
+        return new DomainListResponse.Builder()
+                .withDomains(domains)
+                .build();
+    }
+
+    private Domain find (long id) {
+        Domain domain = domainDao.findById(id);
+        if (domain == null || domain.isDeleted()) {
+            throw new NotFoundException(id, Domain.class);
+        }
+        return domain;
     }
 }
