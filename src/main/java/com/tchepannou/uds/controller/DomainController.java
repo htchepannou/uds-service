@@ -1,9 +1,8 @@
 package com.tchepannou.uds.controller;
-import com.tchepannou.uds.dto.DomainListResponse;
-import com.tchepannou.uds.dto.DomainRequest;
-import com.tchepannou.uds.dto.DomainResponse;
-import com.tchepannou.uds.dto.ErrorResponse;
+
+import com.tchepannou.uds.dto.*;
 import com.tchepannou.uds.exception.DuplicateNameException;
+import com.tchepannou.uds.service.AuthorizationService;
 import com.tchepannou.uds.service.DomainService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -27,14 +26,9 @@ public class DomainController extends AbstractController {
     @Autowired
     private DomainService domainService;
 
-//    @Autowired
-//    private DomainUserService domainUserService;
-//
-//    @Autowired
-//    private RoleService roleService;
-//
-//    @Autowired
-//    private PermissionService permissionService;
+    @Autowired
+    private AuthorizationService authorizationService;
+
 
     //-- AbstractController overrides
     @Override
@@ -76,61 +70,43 @@ public class DomainController extends AbstractController {
         domainService.delete(domainId);
     }
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/{domainId}/users/{userId}/roles")
-//    @ApiOperation("Grant to a user a role in a domain")
-//    public RoleListResponse roles (
-//            @PathVariable final long domainId,
-//            @PathVariable final long userId
-//    ) {
-//        final List<DomainUser> domainUsers = domainUserService.findByDomainByUser(domainId, userId);
-//        final List<Role> roles = domainUsers.stream()
-//                .map(domainUser -> roleService.findById(domainUser.getRoleId()))
-//                .collect(Collectors.toList());
-//
-//        return new RoleListResponse.Builder()
-//                .withRoles(roles)
-//                .build();
-//    }
-//
-//    @RequestMapping(method = RequestMethod.GET, value = "/{domainId}/users/{userId}/permissions")
-//    @ApiOperation("Grant to a user a role in a domain")
-//    public PermissionListResponse permissions (
-//            @PathVariable final long domainId,
-//            @PathVariable final long userId
-//    ) {
-//        final List<DomainUser> domainUsers = domainUserService.findByDomainByUser(domainId, userId);
-//        final List<Role> roles = domainUsers.stream()
-//                .map(domainUser -> roleService.findById(domainUser.getRoleId()))
-//                .collect(Collectors.toList());
-//        final List<Permission> permissions = roles.stream()
-//                .flatMap(role -> permissionService.findByRole(role.getId()).stream())
-//                .distinct()
-//                .collect(Collectors.toList());
-//
-//        return new PermissionListResponse.Builder()
-//                .withPermissions(permissions)
-//                .build();
-//    }
-//
-//    @RequestMapping(method = RequestMethod.POST, value = "/{domainId}/users/{userId}/roles/{roleId}")
-//    @ApiOperation("Grant to a user a role in a domain")
-//    public void grant (
-//            @PathVariable final long domainId,
-//            @PathVariable final long userId,
-//            @PathVariable final long roleId
-//    ) {
-//        domainUserService.create(domainId, userId, roleId);
-//    }
-//
-//    @RequestMapping(method = RequestMethod.DELETE, value = "/{domainId}/users/{userId}/roles/{roleId}")
-//    @ApiOperation("Remove a user's role in a domain")
-//    public void revoke (
-//            @PathVariable final long domainId,
-//            @PathVariable final long userId,
-//            @PathVariable final long roleId
-//    ) {
-//        domainUserService.delete(domainId, userId, roleId);
-//    }
+    @RequestMapping(method = RequestMethod.GET, value = "/{domainId}/users/{userId}/roles")
+    @ApiOperation("Grant to a user a role in a domain")
+    public RoleListResponse roles (
+            @PathVariable final long domainId,
+            @PathVariable final long userId
+    ) {
+        return authorizationService.roles(domainId, userId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{domainId}/users/{userId}/permissions")
+    @ApiOperation("Grant to a user a role in a domain")
+    public PermissionListResponse permissions (
+            @PathVariable final long domainId,
+            @PathVariable final long userId
+    ) {
+        return authorizationService.permissions(domainId, userId);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/{domainId}/users/{userId}/roles/{roleId}")
+    @ApiOperation("Grant to a user a role in a domain")
+    public void grant (
+            @PathVariable final long domainId,
+            @PathVariable final long userId,
+            @PathVariable final long roleId
+    ) {
+        authorizationService.grant(domainId, userId, roleId);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{domainId}/users/{userId}/roles/{roleId}")
+    @ApiOperation("Remove a user's role in a domain")
+    public void revoke (
+            @PathVariable final long domainId,
+            @PathVariable final long userId,
+            @PathVariable final long roleId
+    ) {
+        authorizationService.revoke(domainId, userId, roleId);
+    }
 
     //-- Message Handler
     @ExceptionHandler(DuplicateNameException.class)

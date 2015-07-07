@@ -24,7 +24,7 @@ public class DomainServiceImpl implements DomainService {
     @Override
     public DomainResponse findById(final long id) {
         return toDomainResponse(
-                find(id)
+                findDomain(id)
         );
     }
 
@@ -55,7 +55,7 @@ public class DomainServiceImpl implements DomainService {
     @Transactional
     public DomainResponse update(final long id, final DomainRequest request) {
         try {
-            Domain domain = find(id);
+            Domain domain = findDomain(id);
             domain.setName(request.getName());
             domain.setDescription(request.getDescription());
 
@@ -87,7 +87,7 @@ public class DomainServiceImpl implements DomainService {
                 .build();
     }
 
-    private Domain find (long id) {
+    private Domain findDomain(long id) {
         Domain domain = domainDao.findById(id);
         if (domain == null || domain.isDeleted()) {
             throw new NotFoundException(id, Domain.class);

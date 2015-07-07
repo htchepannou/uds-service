@@ -1,21 +1,9 @@
 package com.tchepannou.uds.config;
 
-import com.tchepannou.uds.dao.DomainDao;
-import com.tchepannou.uds.dao.UserDao;
-import com.tchepannou.uds.dao.UserStatusCodeDao;
-import com.tchepannou.uds.dao.UserStatusDao;
-import com.tchepannou.uds.dao.impl.DomainDaoImpl;
-import com.tchepannou.uds.dao.impl.UserDaoImpl;
-import com.tchepannou.uds.dao.impl.UserStatusCodeDaoImpl;
-import com.tchepannou.uds.dao.impl.UserStatusDaoImpl;
-import com.tchepannou.uds.service.DomainService;
-import com.tchepannou.uds.service.PasswordEncryptor;
-import com.tchepannou.uds.service.UserService;
-import com.tchepannou.uds.service.UserStatusCodeService;
-import com.tchepannou.uds.service.impl.DomainServiceImpl;
-import com.tchepannou.uds.service.impl.PasswordEncryptorImpl;
-import com.tchepannou.uds.service.impl.UserServiceImpl;
-import com.tchepannou.uds.service.impl.UserStatusCodeServiceImpl;
+import com.tchepannou.uds.dao.*;
+import com.tchepannou.uds.dao.impl.*;
+import com.tchepannou.uds.service.*;
+import com.tchepannou.uds.service.impl.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,6 +48,11 @@ public class AppConfig {
     }
 
     @Bean
+    public AuthorizationService authorizationService (){
+        return new AuthorizationServiceImpl();
+    }
+
+    @Bean
     PasswordEncryptor passwordEncryptor (){
         return new PasswordEncryptorImpl();
     }
@@ -68,9 +61,25 @@ public class AppConfig {
     public DomainDao domainDao () {
         return new DomainDaoImpl(dataSource());
     }
+
     @Bean
     public DomainService domainService () {
         return new DomainServiceImpl();
+    }
+
+    @Bean
+    public DomainUserDao domainUserDao () {
+        return new DomainUserDaoImpl(dataSource());
+    }
+
+    @Bean
+    public PermissionDao permissionDao () {
+        return new PermissionDaoImpl(dataSource());
+    }
+
+    @Bean
+    public RoleDao roleDao () {
+        return new RoleDaoImpl(dataSource());
     }
 
     @Bean

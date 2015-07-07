@@ -1,8 +1,13 @@
 package com.tchepannou.uds.controller;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.internal.mapper.ObjectMapperType;
 import com.tchepannou.uds.Starter;
 import com.tchepannou.uds.dao.DomainDao;
+import com.tchepannou.uds.dao.DomainUserDao;
+import com.tchepannou.uds.domain.Domain;
+import com.tchepannou.uds.domain.DomainUser;
 import com.tchepannou.uds.dto.DomainRequest;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
@@ -15,9 +20,16 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
+import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.greaterThan;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Starter.class)
@@ -33,8 +45,8 @@ public class DomainControllerIT {
     @Autowired
     private DomainDao domainDao;
 
-//    @Autowired
-//    private DomainUserDao domainUserDao;
+    @Autowired
+    private DomainUserDao domainUserDao;
 
 
     @Before
@@ -100,267 +112,269 @@ public class DomainControllerIT {
         // @formatter:on
     }
 
-//    @Test
-//    public void test_create () throws Exception {
-//        final DomainRequest req = createDomainRequest("create", "this is a test");
-//
-//        // @formatter:off
-//        given()
-//                .contentType(ContentType.JSON)
-//                .content(req, ObjectMapperType.JACKSON_2)
-//        .when()
-//            .post("/api/domains/")
-//        .then()
-//            .statusCode(HttpStatus.SC_OK)
-//            .log()
-//                .all()
-//            .body("id", greaterThan(0))
-//            .body("name", is(req.getName()))
-//            .body("description", is(req.getDescription()))
-//            .body("fromDate", notNullValue())
-//            .body("toDate", nullValue())
-//        ;
-//        // @formatter:on
-//    }
-//
-//    @Test
-//    public void test_create_duplicateName () {
-//        final DomainRequest req = createDomainRequest("api.moralab.com", "this is a test");
-//
-//        // @formatter:off
-//        given()
-//                .contentType(ContentType.JSON)
-//                .content(req)
-//        .when()
-//            .post("/api/domains/")
-//        .then()
-//            .statusCode(HttpStatus.SC_CONFLICT)
-//            .log()
-//                .all()
-//            .body("message", is("duplicate_name"))
-//        ;
-//        // @formatter:on
-//    }
-//
-//    @Test
-//    public void test_create_noName () {
-//        final DomainRequest req = createDomainRequest(null, "this is a test");
-//
-//        // @formatter:off
-//        given()
-//                .contentType(ContentType.JSON)
-//                .content(req)
-//        .when()
-//            .post("/api/domains/")
-//        .then()
-//            .statusCode(HttpStatus.SC_BAD_REQUEST)
-//            .log()
-//                .all()
-//            .body("message", is("name"))
-//        ;
-//        // @formatter:on
-//    }
-//
-//    @Test
-//    public void test_update () {
-//        final DomainRequest req = createDomainRequest("update", "this is a test");
-//
-//        // @formatter:off
-//        given()
-//                .contentType(ContentType.JSON)
-//                .content(req, ObjectMapperType.JACKSON_2)
-//        .when()
-//            .post("/api/domains/200")
-//        .then()
-//            .statusCode(HttpStatus.SC_OK)
-//            .log()
-//                .all()
-//            .body("id", is(200))
-//            .body("name", is(req.getName()))
-//            .body("description", is(req.getDescription()))
-//        ;
-//        // @formatter:on
-//    }
-//
-//    @Test
-//    public void test_update_noName () {
-//        final DomainRequest req = createDomainRequest(null, "this is a test");
-//
-//        // @formatter:off
-//        given()
-//                .contentType(ContentType.JSON)
-//                .content(req, ObjectMapperType.JACKSON_2)
-//        .when()
-//            .post("/api/domains/200")
-//        .then()
-//            .statusCode(HttpStatus.SC_BAD_REQUEST)
-//            .log()
-//                .all()
-//            .body("message", is("name"))
-//        ;
-//        // @formatter:on
-//    }
-//
-//    @Test
-//    public void test_update_duplicateName () {
-//        final DomainRequest req = createDomainRequest("api.moralab.com", "this is a test");
-//
-//        // @formatter:off
-//        given()
-//                .contentType(ContentType.JSON)
-//                .content(req)
-//        .when()
-//            .post("/api/domains/200")
-//        .then()
-//            .statusCode(HttpStatus.SC_CONFLICT)
-//            .log()
-//                .all()
-//            .body("message", is("duplicate_name"))
-//        ;
-//        // @formatter:on
-//    }
-//
-//    @Test
-//    public void test_update_not_found () {
-//        final DomainRequest req = createDomainRequest("update_not_found", "this is a test");
-//
-//        // @formatter:off
-//        given()
-//                .contentType(ContentType.JSON)
-//                .content(req, ObjectMapperType.JACKSON_2)
-//        .when()
-//            .post("/api/domains/99999")
-//        .then()
-//            .statusCode(HttpStatus.SC_NOT_FOUND)
-//            .log()
-//                .all();
-//    }
-//
-//    @Test
-//    public void test_update_deleted () {
-//        final DomainRequest req = createDomainRequest("update_deleted", "this is a test");
-//
-//        // @formatter:off
-//        given()
-//                .contentType(ContentType.JSON)
-//                .content(req, ObjectMapperType.JACKSON_2)
-//        .when()
-//            .post("/api/domains/201")
-//        .then()
-//            .statusCode(HttpStatus.SC_NOT_FOUND)
-//            .log()
-//                .all();
-//    }
-//
-//    @Test
-//    public void test_delete () {
-//        // @formatter:off
-//        when()
-//            .delete("/api/domains/300")
-//        .then()
-//            .statusCode(HttpStatus.SC_OK)
-//            .log()
-//                .all();
-//        // @formatter:on
-//
-//        Domain domain = domainDao.findById(300);
-//
-//        assertThat(domain.isDeleted()).isTrue();
-//        assertThat(domain.getName()).matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
-//        assertThat(domain.getToDate()).isNotNull();
-//    }
-//
-//    @Test
-//    public void test_delete_not_found () {
-//        // @formatter:off
-//        when()
-//            .delete("/api/domains/9999")
-//        .then()
-//            .statusCode(HttpStatus.SC_NOT_FOUND)
-//            .log()
-//                .all();
-//        // @formatter:on
-//    }
+    @Test
+    public void test_create () throws Exception {
+        final DomainRequest req = createDomainRequest("create", "this is a test");
 
-//    @Test
-//    public void test_roles(){
-//        // @formatter:off
-//        when()
-//            .get("/api/domains/100/users/400/roles")
-//        .then()
-//            .statusCode(HttpStatus.SC_OK)
-//            .log()
-//                .all()
-//            .body("roles.id", contains(400, 401))
-//            .body("roles.name", contains("admin400", "member400"))
-//        ;
-//        // @formatter:on
-//    }
-//
-//    @Test
-//    public void test_permissions(){
-//        // @formatter:off
-//        when()
-//            .get("/api/domains/100/users/500/permissions")
-//        .then()
-//            .statusCode(HttpStatus.SC_OK)
-//            .log()
-//                .all()
-//            .body("permissions.id", contains(500, 501, 502))
-//            .body("permissions.name", contains("perm500", "perm501", "perm502"))
-//        ;
-//        // @formatter:on
-//    }
-//
-//    @Test
-//    public void test_grant () {
-//        // @formatter:off
-//        when()
-//            .post("/api/domains/100/users/600/roles/601")
-//        .then()
-//            .statusCode(HttpStatus.SC_OK)
-//            .log()
-//                .all()
-//        ;
-//        // @formatter:on
-//
-//        DomainUser domainUser = domainUserDao.findByDomainByUser(100, 600, 601);
-//        assertThat(domainUser).isNotNull();
-//    }
-//
-//    @Test
-//    public void test_grant_twice () {
-//        int size = domainUserDao.findByDomainByUser(100, 600).size();
-//
-//        // @formatter:off
-//        when()
-//            .post("/api/domains/100/users/600/roles/600")
-//        .then()
-//            .statusCode(HttpStatus.SC_OK)
-//            .log()
-//                .all()
-//        ;
-//        // @formatter:on
-//
-//        List<DomainUser> domainUsers = domainUserDao.findByDomainByUser(100, 600);
-//        assertThat(domainUsers).hasSize(size);
-//    }
-//
-//    @Test
-//    public void test_revoke () {
-//        // @formatter:off
-//        when()
-//            .delete("/api/domains/100/users/600/roles/600")
-//        .then()
-//            .statusCode(HttpStatus.SC_OK)
-//            .log()
-//                .all()
-//        ;
-//        // @formatter:on
-//
-//        DomainUser domainUser = domainUserDao.findByDomainByUser(100, 600, 601);
-//        assertThat(domainUser).isNull();
-//    }
+        // @formatter:off
+        given()
+                .contentType(ContentType.JSON)
+                .content(req, ObjectMapperType.JACKSON_2)
+        .when()
+            .post("/api/domains/")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all()
+            .body("id", greaterThan(0))
+            .body("name", is(req.getName()))
+            .body("description", is(req.getDescription()))
+            .body("fromDate", notNullValue())
+            .body("toDate", nullValue())
+        ;
+        // @formatter:on
+    }
+
+
+
+    @Test
+    public void test_create_duplicateName () {
+        final DomainRequest req = createDomainRequest("api.moralab.com", "this is a test");
+
+        // @formatter:off
+        given()
+                .contentType(ContentType.JSON)
+                .content(req)
+        .when()
+            .post("/api/domains/")
+        .then()
+            .statusCode(HttpStatus.SC_CONFLICT)
+            .log()
+                .all()
+            .body("message", is("duplicate_name"))
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_create_noName () {
+        final DomainRequest req = createDomainRequest(null, "this is a test");
+
+        // @formatter:off
+        given()
+                .contentType(ContentType.JSON)
+                .content(req)
+        .when()
+            .post("/api/domains/")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST)
+            .log()
+                .all()
+            .body("message", is("name"))
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_update () {
+        final DomainRequest req = createDomainRequest("update", "this is a test");
+
+        // @formatter:off
+        given()
+                .contentType(ContentType.JSON)
+                .content(req, ObjectMapperType.JACKSON_2)
+        .when()
+            .post("/api/domains/200")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all()
+            .body("id", is(200))
+            .body("name", is(req.getName()))
+            .body("description", is(req.getDescription()))
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_update_noName () {
+        final DomainRequest req = createDomainRequest(null, "this is a test");
+
+        // @formatter:off
+        given()
+                .contentType(ContentType.JSON)
+                .content(req, ObjectMapperType.JACKSON_2)
+        .when()
+            .post("/api/domains/200")
+        .then()
+            .statusCode(HttpStatus.SC_BAD_REQUEST)
+            .log()
+                .all()
+            .body("message", is("name"))
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_update_duplicateName () {
+        final DomainRequest req = createDomainRequest("api.moralab.com", "this is a test");
+
+        // @formatter:off
+        given()
+                .contentType(ContentType.JSON)
+                .content(req)
+        .when()
+            .post("/api/domains/200")
+        .then()
+            .statusCode(HttpStatus.SC_CONFLICT)
+            .log()
+                .all()
+            .body("message", is("duplicate_name"))
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_update_not_found () {
+        final DomainRequest req = createDomainRequest("update_not_found", "this is a test");
+
+        // @formatter:off
+        given()
+                .contentType(ContentType.JSON)
+                .content(req, ObjectMapperType.JACKSON_2)
+        .when()
+            .post("/api/domains/99999")
+        .then()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+            .log()
+                .all();
+    }
+
+    @Test
+    public void test_update_deleted () {
+        final DomainRequest req = createDomainRequest("update_deleted", "this is a test");
+
+        // @formatter:off
+        given()
+                .contentType(ContentType.JSON)
+                .content(req, ObjectMapperType.JACKSON_2)
+        .when()
+            .post("/api/domains/201")
+        .then()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+            .log()
+                .all();
+    }
+
+    @Test
+    public void test_delete () {
+        // @formatter:off
+        when()
+            .delete("/api/domains/300")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all();
+        // @formatter:on
+
+        Domain domain = domainDao.findById(300);
+
+        assertThat(domain.isDeleted()).isTrue();
+        assertThat(domain.getName()).matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
+        assertThat(domain.getToDate()).isNotNull();
+    }
+
+    @Test
+    public void test_delete_not_found () {
+        // @formatter:off
+        when()
+            .delete("/api/domains/9999")
+        .then()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+            .log()
+                .all();
+        // @formatter:on
+    }
+
+    @Test
+    public void test_roles(){
+        // @formatter:off
+        when()
+            .get("/api/domains/100/users/400/roles")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all()
+            .body("roles.id", contains(400, 401))
+            .body("roles.name", contains("admin400", "member400"))
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_permissions(){
+        // @formatter:off
+        when()
+            .get("/api/domains/100/users/500/permissions")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all()
+            .body("permissions.id", contains(500, 501, 502))
+            .body("permissions.name", contains("perm500", "perm501", "perm502"))
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_grant () {
+        // @formatter:off
+        when()
+            .post("/api/domains/100/users/600/roles/601")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all()
+        ;
+        // @formatter:on
+
+        DomainUser domainUser = domainUserDao.findByDomainByUserByRole(100, 600, 601);
+        assertThat(domainUser).isNotNull();
+    }
+
+    @Test
+    public void test_grant_twice () {
+        int size = domainUserDao.findByDomainByUser(100, 600).size();
+
+        // @formatter:off
+        when()
+            .post("/api/domains/100/users/600/roles/600")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all()
+        ;
+        // @formatter:on
+
+        List<DomainUser> domainUsers = domainUserDao.findByDomainByUser(100, 600);
+        assertThat(domainUsers).hasSize(size);
+    }
+
+    @Test
+    public void test_revoke () {
+        // @formatter:off
+        when()
+            .delete("/api/domains/100/users/600/roles/600")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all()
+        ;
+        // @formatter:on
+
+        DomainUser domainUser = domainUserDao.findByDomainByUserByRole(100, 600, 601);
+        assertThat(domainUser).isNull();
+    }
 
     private DomainRequest createDomainRequest (String name, String description){
         final DomainRequest req = new DomainRequest();
