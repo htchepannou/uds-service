@@ -257,6 +257,38 @@
 
             <!-- ===== Database ===== -->
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <executions>
+                    <execution>
+                        <id>create-db</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <url>jdbc:mysql://localhost:3306</url>
+                            <driver>com.mysql.jdbc.Driver</driver>
+                            <username>root</username>
+                            <sqlCommand>
+                                DROP DATABASE IF EXISTS uds;
+                                CREATE DATABASE uds;
+                            </sqlCommand>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>3.2.1</version>
@@ -275,6 +307,9 @@
                     <execution>
                         <id>clean-db</id>
                         <phase>process-classes</phase>
+                        <configuration>
+
+                        </configuration>
                         <goals>
                             <goal>clean</goal>
                         </goals>
@@ -318,41 +353,6 @@
                         </configuration>
                     </plugin>
 
-
-                    <!-- ===== Database ===== -->
-                    <plugin>
-                        <groupId>org.flywaydb</groupId>
-                        <artifactId>flyway-maven-plugin</artifactId>
-                        <version>3.2.1</version>
-                        <configuration>
-                            <url>jdbc:mysql://localhost:3306/uds</url>
-                            <user>root</user>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>mysql</groupId>
-                                <artifactId>mysql-connector-java</artifactId>
-                                <version>${mysql.version}</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <id>clean-db</id>
-                                <phase>process-classes</phase>
-                                <goals>
-                                    <goal>clean</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>migrate-db</id>
-                                <phase>process-classes</phase>
-                                <goals>
-                                    <goal>migrate</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                     <!-- === Migrate IS DB == -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -369,7 +369,7 @@
                         <executions>
                             <execution>
                                 <id>migrate-data</id>
-                                <phase>process-classes</phase>
+                                <phase>verify</phase>
                                 <goals>
                                     <goal>execute</goal>
                                 </goals>

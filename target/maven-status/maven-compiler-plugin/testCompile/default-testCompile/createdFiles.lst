@@ -1,4 +1,5 @@
 com/tchepannou/uds/service/impl/PasswordEncryptorImplTest.class
 com/tchepannou/uds/controller/DomainControllerIT.class
 com/tchepannou/uds/controller/AuthenticationControllerIT.class
+com/tchepannou/uds/domain/AccessTokenTest.class
 com/tchepannou/uds/controller/UserControllerIT.class
