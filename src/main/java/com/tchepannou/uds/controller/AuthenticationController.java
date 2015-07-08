@@ -1,8 +1,8 @@
 package com.tchepannou.uds.controller;
 
-import com.tchepannou.uds.dto.LoginRequest;
 import com.tchepannou.uds.dto.AccessTokenResponse;
 import com.tchepannou.uds.dto.ErrorResponse;
+import com.tchepannou.uds.dto.LoginRequest;
 import com.tchepannou.uds.exception.AccessDeniedException;
 import com.tchepannou.uds.exception.AccessTokenExpiredException;
 import com.tchepannou.uds.exception.AccountNotActiveException;
@@ -10,6 +10,8 @@ import com.tchepannou.uds.exception.AuthFailedException;
 import com.tchepannou.uds.service.AuthenticationService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +40,33 @@ public class AuthenticationController extends AbstractController {
 
     //-- REST methods
     @RequestMapping(method = RequestMethod.GET, value="/{authId}")
-    @ApiOperation("Find a token")
+    @ApiOperation("Returns an access token")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = AccessTokenResponse.class),
+            @ApiResponse(code = 404, message = "Access token not found or expired", response = ErrorResponse.class)
+    })
     public AccessTokenResponse findById (@PathVariable final long authId) {
         return authService.findById(authId);
     }
 
 
     @RequestMapping(method = RequestMethod.POST)
-    @ApiOperation("Authenticate a user")
+    @ApiOperation("Login")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = AccessTokenResponse.class),
+            @ApiResponse(code = 400, message = "Invalid request", response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "Authentication failed", response = ErrorResponse.class)
+    })
     public AccessTokenResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value="/{authId}")
-    @ApiOperation("Sign a user out")
+    @ApiOperation("Logout")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 404, message = "Access token not found or expired")
+    })
     public void logout(@PathVariable final long authId) {
         authService.logout(authId);
     }

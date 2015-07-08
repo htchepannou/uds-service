@@ -1,9 +1,11 @@
 package com.tchepannou.uds.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
+@ApiModel
 public class ErrorResponse {
     //-- Attribute
     private int statusCode;

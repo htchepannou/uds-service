@@ -39,7 +39,7 @@ public class UserController extends AbstractController {
 
     //-- REST methods
     @RequestMapping(method = RequestMethod.GET, value = "/status-codes")
-    @ApiOperation("List all users' status codes")
+    @ApiOperation("Returns all the status codes")
     public UserStatusCodeListResponse statusCodes () {
         return userStatusCodeService.findAll();
     }
@@ -52,13 +52,13 @@ public class UserController extends AbstractController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ApiOperation("Create a new user account")
+    @ApiOperation("Create")
     public UserResponse create (@Valid @RequestBody final CreateUserRequest request) {
         return userService.create(request);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/{userId}/password")
-    @ApiOperation("Update a user's password")
+    @ApiOperation("Update a password")
     public UserResponse password (
             @PathVariable final long userId,
             @RequestParam(value = "password", required = true) @NotBlank final String password
@@ -67,7 +67,7 @@ public class UserController extends AbstractController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/{userId}/login")
-    @ApiOperation("Update a user's login")
+    @ApiOperation("Update a login")
     public UserResponse login (
             @PathVariable final long userId,
             @RequestParam(value = "login", required = true) @NotBlank final String login
@@ -76,13 +76,13 @@ public class UserController extends AbstractController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
-    @ApiOperation("Delete a user account")
+    @ApiOperation("Delete")
     public void delete (@PathVariable final long userId) {
         userService.delete(userId);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/{userId}/status")
-    @ApiOperation("Update the user's status")
+    @ApiOperation("Change user's status")
     public UserResponse setStatus (
             @PathVariable final long userId,
             @Valid @RequestBody final UserStatusRequest request

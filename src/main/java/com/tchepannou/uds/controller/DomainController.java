@@ -38,25 +38,25 @@ public class DomainController extends AbstractController {
 
     //-- REST methods
     @RequestMapping(method = RequestMethod.GET, value = "/{domainId}")
-    @ApiOperation("Find a domain by ID")
+    @ApiOperation("Returns a domain")
     public DomainResponse findById(@PathVariable final long domainId) {
         return domainService.findById(domainId);
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    @ApiOperation("Find all the domains")
+    @ApiOperation("Returns all the domains")
     public DomainListResponse findAll() {
         return domainService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ApiOperation("Create a new domain")
+    @ApiOperation("Create")
     public DomainResponse create(@RequestBody @Valid final DomainRequest request) {
         return domainService.create(request);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/{domainId}")
-    @ApiOperation("Update a domain")
+    @ApiOperation("Update")
     public DomainResponse update(
             @PathVariable final long domainId,
             @Valid @RequestBody final DomainRequest request
@@ -65,13 +65,13 @@ public class DomainController extends AbstractController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{domainId}")
-    @ApiOperation("Delete a domain by ID")
+    @ApiOperation("Delete")
     public void delete(@PathVariable final long domainId) {
         domainService.delete(domainId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{domainId}/users/{userId}/roles")
-    @ApiOperation("Grant to a user a role in a domain")
+    @ApiOperation("Return user's roles")
     public RoleListResponse roles (
             @PathVariable final long domainId,
             @PathVariable final long userId
@@ -80,7 +80,7 @@ public class DomainController extends AbstractController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{domainId}/users/{userId}/permissions")
-    @ApiOperation("Grant to a user a role in a domain")
+    @ApiOperation("Return user's permissions")
     public PermissionListResponse permissions (
             @PathVariable final long domainId,
             @PathVariable final long userId
@@ -89,23 +89,13 @@ public class DomainController extends AbstractController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/{domainId}/users/{userId}/roles/{roleId}")
-    @ApiOperation("Grant to a user a role in a domain")
+    @ApiOperation("Grant a role to user")
     public void grant (
             @PathVariable final long domainId,
             @PathVariable final long userId,
             @PathVariable final long roleId
     ) {
         authorizationService.grant(domainId, userId, roleId);
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{domainId}/users/{userId}/roles/{roleId}")
-    @ApiOperation("Remove a user's role in a domain")
-    public void revoke (
-            @PathVariable final long domainId,
-            @PathVariable final long userId,
-            @PathVariable final long roleId
-    ) {
-        authorizationService.revoke(domainId, userId, roleId);
     }
 
     //-- Message Handler
@@ -116,6 +106,16 @@ public class DomainController extends AbstractController {
             final DuplicateNameException exception
     ) {
         return handleException(request, HttpStatus.CONFLICT, "duplicate_name", exception);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{domainId}/users/{userId}/roles/{roleId}")
+    @ApiOperation("Revoke a user's role")
+    public void revoke (
+            @PathVariable final long domainId,
+            @PathVariable final long userId,
+            @PathVariable final long roleId
+    ) {
+        authorizationService.revoke(domainId, userId, roleId);
     }
 
 }
