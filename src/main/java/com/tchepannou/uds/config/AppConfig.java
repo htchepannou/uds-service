@@ -48,8 +48,18 @@ public class AppConfig {
     }
 
     @Bean
+    public AccessTokenDao accessTokenDao () {
+        return new AccessTokenDaoImpl(dataSource());
+    }
+
+    @Bean
     public AuthorizationService authorizationService (){
         return new AuthorizationServiceImpl();
+    }
+
+    @Bean
+    public AuthenticationService authService () {
+        return new AuthenticationServiceImpl();
     }
 
     @Bean

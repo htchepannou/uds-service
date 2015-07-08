@@ -2,6 +2,7 @@ package com.tchepannou.uds.dao.impl;
 
 import com.tchepannou.uds.dao.UserStatusCodeDao;
 import com.tchepannou.uds.domain.UserStatusCode;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
@@ -21,6 +22,22 @@ public class UserStatusCodeDaoImpl extends AbstractPersistentEnumDaoImpl<UserSta
                 new Object[]{true},
                 getRowMapper()
         );
+    }
+
+    @Override
+    public UserStatusCode findByUser (long userId) {
+        try {
+            return queryForObject(
+                    "SELECT * FROM " + getTableName() + " SC"
+                            + " JOIN t_user_status S ON S.status_code_fk=SC.id"
+                            + " JOIN t_user U ON U.status_fk=S.id"
+                            + " WHERE U.id=?",
+                    new Object[]{userId},
+                    getRowMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {    // NOSONAR
+            return null;
+        }
     }
 
     @Override

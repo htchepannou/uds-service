@@ -1,0 +1,96 @@
+package com.tchepannou.uds.controller;
+
+import com.tchepannou.uds.dto.AuthRequest;
+import com.tchepannou.uds.dto.AuthResponse;
+import com.tchepannou.uds.dto.ErrorResponse;
+import com.tchepannou.uds.exception.AccessDeniedException;
+import com.tchepannou.uds.exception.AccessTokenExpiredException;
+import com.tchepannou.uds.exception.AccountNotActiveException;
+import com.tchepannou.uds.exception.AuthFailedException;
+import com.tchepannou.uds.service.AuthenticationService;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+@RestController
+@Api(basePath = "/auth", value = "Authentication", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value="/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+public class AuthenticationController extends AbstractController {
+    //-- Attributes
+    private static final Logger LOG = LoggerFactory.getLogger(AuthenticationController.class);
+
+    @Autowired
+    private AuthenticationService authService;
+
+    //-- AbstractController overrides
+    @Override
+    protected Logger getLogger() {
+        return LOG;
+    }
+
+    //-- REST methods
+    @RequestMapping(method = RequestMethod.GET, value="/{authId}")
+    @ApiOperation("Find a token")
+    public AuthResponse findById (@PathVariable final long authId) {
+        return authService.findById(authId);
+    }
+
+
+    @RequestMapping(method = RequestMethod.POST)
+    @ApiOperation("Authenticate a user")
+    public AuthResponse login(@Valid @RequestBody AuthRequest request) {
+        return authService.login(request);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value="/{authId}")
+    @ApiOperation("Sign a user out")
+    public void logout(@PathVariable final long authId) {
+        authService.logout(authId);
+    }
+
+    //-- Exception handlers
+    @ExceptionHandler(AccessTokenExpiredException.class)
+    @ResponseStatus(value= HttpStatus.NOT_FOUND)
+    public ErrorResponse handleError(
+            final HttpServletRequest request,
+            final AccessTokenExpiredException exception
+    ) {
+        return handleException(request, HttpStatus.NOT_FOUND, "expired", exception);
+    }
+
+    @ExceptionHandler(AuthFailedException.class)
+    @ResponseStatus(value= HttpStatus.CONFLICT)
+    public ErrorResponse handleError(
+            final HttpServletRequest request,
+            final AuthFailedException exception
+    ) {
+        return handleException(request, HttpStatus.CONFLICT, "auth_failed", exception);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(value= HttpStatus.CONFLICT)
+    public ErrorResponse handleError(
+            final HttpServletRequest request,
+            final AccessDeniedException exception
+    ) {
+        return handleException(request, HttpStatus.CONFLICT, "access_denied", exception);
+    }
+
+    @ExceptionHandler(AccountNotActiveException.class)
+    @ResponseStatus(value= HttpStatus.CONFLICT)
+    public ErrorResponse handleError(
+            final HttpServletRequest request,
+            final AccountNotActiveException exception
+    ) {
+        return handleException(request, HttpStatus.CONFLICT, "inactive", exception);
+    }
+
+}
