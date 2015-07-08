@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.tchepannou.uds.domain.UserStatusCode;
 
 public class UserStatusCodeResponse {
-    public long id;
+    private long id;
     private String name;
     private boolean active;
     private boolean defaultStatus;

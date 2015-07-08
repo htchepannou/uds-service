@@ -18,11 +18,11 @@ public class UserStatusResponse implements Serializable {
     //-- Constructor
     public UserStatusResponse(final Builder builder){
         final UserStatus userStatus = builder.userStatus;
-        final UserStatusCode statusCode = builder.statusCode;
+        final UserStatusCode userStatusCode = builder.statusCode;
 
         this.id = userStatus.getId();
-        this.statusCode = statusCode.getId();
-        this.statusText = statusCode.getName();
+        this.statusCode = userStatusCode.getId();
+        this.statusText = userStatusCode.getName();
         this.date = userStatus.getDate();
         this.comment = userStatus.getComment();
     }

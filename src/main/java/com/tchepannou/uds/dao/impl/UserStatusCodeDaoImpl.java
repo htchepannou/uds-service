@@ -50,6 +50,7 @@ public class UserStatusCodeDaoImpl extends AbstractPersistentEnumDaoImpl<UserSta
         return new UserStatusCode();
     }
 
+    @Override
     protected RowMapper<UserStatusCode> getRowMapper () {
         return new RowMapper<UserStatusCode>() {
             @Override

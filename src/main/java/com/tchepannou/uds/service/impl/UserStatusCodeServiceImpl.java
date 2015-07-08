@@ -9,6 +9,7 @@ public class UserStatusCodeServiceImpl implements UserStatusCodeService {
     @Autowired
     private UserStatusCodeDao dao;
 
+    @Override
     public UserStatusCodeListResponse findAll () {
         return new UserStatusCodeListResponse.Builder()
                 .withUserStatusCodes(
