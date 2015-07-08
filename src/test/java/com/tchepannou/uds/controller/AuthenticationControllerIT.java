@@ -6,7 +6,7 @@ import com.jayway.restassured.internal.mapper.ObjectMapperType;
 import com.tchepannou.uds.Starter;
 import com.tchepannou.uds.dao.AccessTokenDao;
 import com.tchepannou.uds.domain.AccessToken;
-import com.tchepannou.uds.dto.AuthRequest;
+import com.tchepannou.uds.dto.LoginRequest;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
@@ -146,7 +146,7 @@ public class AuthenticationControllerIT {
     @Test
     public void test_login (){
         Date now = new Date ();
-        AuthRequest req = createAuthRequest(100, "ray.sponsible", "secret");
+        LoginRequest req = createAuthRequest(100, "ray.sponsible", "secret");
 
         // @formatter:off
         int id = given()
@@ -176,7 +176,7 @@ public class AuthenticationControllerIT {
 
     @Test
     public void test_login_deletedUser (){
-        AuthRequest req = createAuthRequest(100, "ray500.sponsible", "secret");
+        LoginRequest req = createAuthRequest(100, "ray500.sponsible", "secret");
 
         // @formatter:off
         given()
@@ -195,7 +195,7 @@ public class AuthenticationControllerIT {
 
     @Test
     public void test_login_badLogin (){
-        AuthRequest req = createAuthRequest(100, "???", "secret");
+        LoginRequest req = createAuthRequest(100, "???", "secret");
 
         // @formatter:off
         given()
@@ -214,7 +214,7 @@ public class AuthenticationControllerIT {
 
     @Test
     public void test_login_noLogin (){
-        AuthRequest req = createAuthRequest(100, null, "secret");
+        LoginRequest req = createAuthRequest(100, null, "secret");
 
         // @formatter:off
         given()
@@ -233,7 +233,7 @@ public class AuthenticationControllerIT {
 
     @Test
     public void test_login_badPassword (){
-        AuthRequest req = createAuthRequest(100, "ray.sponsible", "se??cret");
+        LoginRequest req = createAuthRequest(100, "ray.sponsible", "se??cret");
 
         // @formatter:off
         given()
@@ -252,7 +252,7 @@ public class AuthenticationControllerIT {
 
     @Test
     public void test_login_noPassword (){
-        AuthRequest req = createAuthRequest(100, "ray.sponsible", null);
+        LoginRequest req = createAuthRequest(100, "ray.sponsible", null);
 
         // @formatter:off
         given()
@@ -271,7 +271,7 @@ public class AuthenticationControllerIT {
 
     @Test
     public void test_login_accessDenied (){
-        AuthRequest req = createAuthRequest(100, "ray600.sponsible", "secret");
+        LoginRequest req = createAuthRequest(100, "ray600.sponsible", "secret");
 
         // @formatter:off
         given()
@@ -290,7 +290,7 @@ public class AuthenticationControllerIT {
 
     @Test
     public void test_login_noDomain (){
-        AuthRequest req = createAuthRequest(0, "ray600.sponsible", "secret");
+        LoginRequest req = createAuthRequest(0, "ray600.sponsible", "secret");
 
         // @formatter:off
         given()
@@ -310,7 +310,7 @@ public class AuthenticationControllerIT {
 
     @Test
     public void test_login_notActive (){
-        AuthRequest req = createAuthRequest(100, "ray700.sponsible", "secret");
+        LoginRequest req = createAuthRequest(100, "ray700.sponsible", "secret");
 
         // @formatter:off
         given()
@@ -327,8 +327,8 @@ public class AuthenticationControllerIT {
         // @formatter:on
     }
 
-    private AuthRequest createAuthRequest (long domainId, String login, String password){
-        AuthRequest req = new AuthRequest();
+    private LoginRequest createAuthRequest (long domainId, String login, String password){
+        LoginRequest req = new LoginRequest();
         req.setDomainId(domainId);
         req.setRemoteIp("10.1.1.1");
         req.setUserAgent("user-agent");

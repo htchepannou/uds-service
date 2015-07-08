@@ -1,3 +1,4 @@
 /Users/htchepannou/Perso/uds-service/src/test/java/com/tchepannou/uds/service/impl/PasswordEncryptorImplTest.java
 /Users/htchepannou/Perso/uds-service/src/test/java/com/tchepannou/uds/controller/DomainControllerIT.java
+/Users/htchepannou/Perso/uds-service/src/test/java/com/tchepannou/uds/controller/AuthenticationControllerIT.java
 /Users/htchepannou/Perso/uds-service/src/test/java/com/tchepannou/uds/controller/UserControllerIT.java

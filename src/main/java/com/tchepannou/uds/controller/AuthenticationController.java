@@ -1,7 +1,7 @@
 package com.tchepannou.uds.controller;
 
-import com.tchepannou.uds.dto.AuthRequest;
-import com.tchepannou.uds.dto.AuthResponse;
+import com.tchepannou.uds.dto.LoginRequest;
+import com.tchepannou.uds.dto.AccessTokenResponse;
 import com.tchepannou.uds.dto.ErrorResponse;
 import com.tchepannou.uds.exception.AccessDeniedException;
 import com.tchepannou.uds.exception.AccessTokenExpiredException;
@@ -39,14 +39,14 @@ public class AuthenticationController extends AbstractController {
     //-- REST methods
     @RequestMapping(method = RequestMethod.GET, value="/{authId}")
     @ApiOperation("Find a token")
-    public AuthResponse findById (@PathVariable final long authId) {
+    public AccessTokenResponse findById (@PathVariable final long authId) {
         return authService.findById(authId);
     }
 
 
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation("Authenticate a user")
-    public AuthResponse login(@Valid @RequestBody AuthRequest request) {
+    public AccessTokenResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
 

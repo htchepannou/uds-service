@@ -1,10 +1,12 @@
 package com.tchepannou.uds.dto;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
 
-public class AuthRequest {
+@ApiModel
+public class LoginRequest {
     //-- Attributes
     @NotBlank(message = "login")
     private String login;
@@ -16,10 +18,10 @@ public class AuthRequest {
     private long domainId;
 
     private String remoteIp;
+
     private String userAgent;
 
     //-- Getter/Setter
-
     public String getLogin() {
         return login;
     }

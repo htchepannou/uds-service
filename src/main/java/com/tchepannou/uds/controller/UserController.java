@@ -1,8 +1,8 @@
 package com.tchepannou.uds.controller;
 
 import com.tchepannou.uds.dto.*;
-import com.tchepannou.uds.exception.DuplicatePartyException;
 import com.tchepannou.uds.exception.DuplicateLoginException;
+import com.tchepannou.uds.exception.DuplicatePartyException;
 import com.tchepannou.uds.service.UserService;
 import com.tchepannou.uds.service.UserStatusCodeService;
 import com.wordnik.swagger.annotations.Api;

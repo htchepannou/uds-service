@@ -8,8 +8,8 @@ import com.tchepannou.uds.domain.AccessToken;
 import com.tchepannou.uds.domain.DomainUser;
 import com.tchepannou.uds.domain.User;
 import com.tchepannou.uds.domain.UserStatusCode;
-import com.tchepannou.uds.dto.AuthRequest;
-import com.tchepannou.uds.dto.AuthResponse;
+import com.tchepannou.uds.dto.AccessTokenResponse;
+import com.tchepannou.uds.dto.LoginRequest;
 import com.tchepannou.uds.exception.*;
 import com.tchepannou.uds.service.AuthenticationService;
 import com.tchepannou.uds.service.PasswordEncryptor;
@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     //-- AuthenticationService overrides
     @Override
-    public AuthResponse findById(final long id) {
+    public AccessTokenResponse findById(final long id) {
         AccessToken token = accessTokenDao.findById(id);
         if (token == null) {
             throw new NotFoundException(id, AccessToken.class);
@@ -56,7 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public AuthResponse login(final AuthRequest request) {
+    public AccessTokenResponse login(final LoginRequest request) {
         /* Authenticate */
         User user = userDao.findByLogin(request.getLogin());
         if (user == null || user.isDeleted()){
@@ -100,13 +100,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     //-- Private
-    private AuthResponse toAuthResponse (AccessToken token) {
-        return new AuthResponse.Builder()
+    private AccessTokenResponse toAuthResponse (AccessToken token) {
+        return new AccessTokenResponse.Builder()
                 .withAccessToken(token)
                 .build();
     }
 
-    private AccessToken createAccessToken(AuthRequest request, User user) {
+    private AccessToken createAccessToken(LoginRequest request, User user) {
         final Date now = new Date();
         final AccessToken token = new AccessToken();
         token.setFromDate(now);

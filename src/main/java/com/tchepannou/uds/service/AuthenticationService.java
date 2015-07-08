@@ -1,12 +1,12 @@
 package com.tchepannou.uds.service;
 
-import com.tchepannou.uds.dto.AuthRequest;
-import com.tchepannou.uds.dto.AuthResponse;
+import com.tchepannou.uds.dto.LoginRequest;
+import com.tchepannou.uds.dto.AccessTokenResponse;
 
 public interface AuthenticationService {
-    AuthResponse findById(long id);
+    AccessTokenResponse findById(long id);
 
-    AuthResponse login(AuthRequest request);
+    AccessTokenResponse login(LoginRequest request);
 
     void logout(long authId);
 }

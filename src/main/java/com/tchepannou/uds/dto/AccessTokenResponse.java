@@ -4,7 +4,7 @@ import com.tchepannou.uds.domain.AccessToken;
 
 import java.util.Date;
 
-public class AuthResponse {
+public class AccessTokenResponse {
     //-- Attributes
     private long id;
     private long userId;
@@ -16,7 +16,7 @@ public class AuthResponse {
 
 
     //-- Constructor
-    private AuthResponse (final Builder builder){
+    private AccessTokenResponse(final Builder builder){
         AccessToken token = builder.token;
         this.id = token.getId();
         this.userId = token.getUserId();
@@ -64,8 +64,8 @@ public class AuthResponse {
     public static class Builder {
         private AccessToken token;
 
-        public AuthResponse build (){
-            return new AuthResponse(this);
+        public AccessTokenResponse build (){
+            return new AccessTokenResponse(this);
         }
 
         public Builder withAccessToken (AccessToken token) {
