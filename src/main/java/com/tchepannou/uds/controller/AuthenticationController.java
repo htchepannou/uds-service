@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,12 +54,13 @@ public class AuthenticationController extends AbstractController {
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation("Login")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = AccessTokenResponse.class),
+            @ApiResponse(code = 201, message = "Success - New access token created", response = AccessTokenResponse.class),
             @ApiResponse(code = 400, message = "Invalid request", response = ErrorResponse.class),
             @ApiResponse(code = 409, message = "Authentication failed", response = ErrorResponse.class)
     })
-    public AccessTokenResponse login(@Valid @RequestBody LoginRequest request) {
-        return authService.login(request);
+    public ResponseEntity<AccessTokenResponse> login(@Valid @RequestBody LoginRequest request) {
+        AccessTokenResponse token =  authService.login(request);
+        return new ResponseEntity<AccessTokenResponse>(token, HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value="/{authId}")

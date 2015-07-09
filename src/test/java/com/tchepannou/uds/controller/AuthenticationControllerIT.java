@@ -155,7 +155,7 @@ public class AuthenticationControllerIT {
         .when()
             .post("/api/auth/")
         .then()
-            .statusCode(HttpStatus.SC_OK)
+            .statusCode(HttpStatus.SC_CREATED)
             .log()
                 .all()
             .body("userId", is(100))
