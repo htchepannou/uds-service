@@ -60,14 +60,14 @@ public class AuthenticationController extends AbstractController {
     })
     public ResponseEntity<AccessTokenResponse> login(@Valid @RequestBody LoginRequest request) {
         AccessTokenResponse token =  authService.login(request);
-        return new ResponseEntity<AccessTokenResponse>(token, HttpStatus.CREATED);
+        return new ResponseEntity<>(token, HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value="/{authId}")
     @ApiOperation("Logout")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 404, message = "Access token not found or expired")
+            @ApiResponse(code = 404, message = "Access token not found or expired", response = ErrorResponse.class)
     })
     public void logout(@PathVariable final long authId) {
         authService.logout(authId);

@@ -123,7 +123,7 @@ public class DomainControllerIT {
         .when()
             .post("/api/domains/")
         .then()
-            .statusCode(HttpStatus.SC_OK)
+            .statusCode(HttpStatus.SC_CREATED)
             .log()
                 .all()
             .body("id", greaterThan(0))
@@ -184,7 +184,7 @@ public class DomainControllerIT {
                 .contentType(ContentType.JSON)
                 .content(req, ObjectMapperType.JACKSON_2)
         .when()
-            .post("/api/domains/200")
+            .put("/api/domains/200")
         .then()
             .statusCode(HttpStatus.SC_OK)
             .log()
@@ -205,7 +205,7 @@ public class DomainControllerIT {
                 .contentType(ContentType.JSON)
                 .content(req, ObjectMapperType.JACKSON_2)
         .when()
-            .post("/api/domains/200")
+            .put("/api/domains/200")
         .then()
             .statusCode(HttpStatus.SC_BAD_REQUEST)
             .log()
@@ -224,7 +224,7 @@ public class DomainControllerIT {
                 .contentType(ContentType.JSON)
                 .content(req)
         .when()
-            .post("/api/domains/200")
+            .put("/api/domains/200")
         .then()
             .statusCode(HttpStatus.SC_CONFLICT)
             .log()
@@ -243,7 +243,7 @@ public class DomainControllerIT {
                 .contentType(ContentType.JSON)
                 .content(req, ObjectMapperType.JACKSON_2)
         .when()
-            .post("/api/domains/99999")
+            .put("/api/domains/99999")
         .then()
             .statusCode(HttpStatus.SC_NOT_FOUND)
             .log()
@@ -259,7 +259,7 @@ public class DomainControllerIT {
                 .contentType(ContentType.JSON)
                 .content(req, ObjectMapperType.JACKSON_2)
         .when()
-            .post("/api/domains/201")
+            .put("/api/domains/201")
         .then()
             .statusCode(HttpStatus.SC_NOT_FOUND)
             .log()
@@ -330,7 +330,7 @@ public class DomainControllerIT {
     public void test_grant () {
         // @formatter:off
         when()
-            .post("/api/domains/100/users/600/roles/601")
+            .put("/api/domains/100/users/600/roles/601")
         .then()
             .statusCode(HttpStatus.SC_OK)
             .log()
@@ -348,7 +348,7 @@ public class DomainControllerIT {
 
         // @formatter:off
         when()
-            .post("/api/domains/100/users/600/roles/600")
+            .put("/api/domains/100/users/600/roles/600")
         .then()
             .statusCode(HttpStatus.SC_OK)
             .log()
@@ -358,6 +358,51 @@ public class DomainControllerIT {
 
         List<DomainUser> domainUsers = domainUserDao.findByDomainByUser(100, 600);
         assertThat(domainUsers).hasSize(size);
+    }
+
+    @Test
+    public void test_grant_badDomain () {
+        int size = domainUserDao.findByDomainByUser(100, 600).size();
+
+        // @formatter:off
+        when()
+            .put("/api/domains/9999/users/600/roles/600")
+        .then()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+            .log()
+                .all()
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_grant_badUser () {
+        int size = domainUserDao.findByDomainByUser(100, 600).size();
+
+        // @formatter:off
+        when()
+            .put("/api/domains/100/users/9999/roles/600")
+        .then()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+            .log()
+                .all()
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_grant_badRole () {
+        int size = domainUserDao.findByDomainByUser(100, 600).size();
+
+        // @formatter:off
+        when()
+            .put("/api/domains/100/users/600/roles/99999")
+        .then()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+            .log()
+                .all()
+        ;
+        // @formatter:on
     }
 
     @Test
