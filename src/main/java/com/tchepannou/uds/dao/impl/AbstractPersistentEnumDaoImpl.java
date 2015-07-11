@@ -27,7 +27,7 @@ public abstract class AbstractPersistentEnumDaoImpl<T extends PersistentEnum> ex
     public T findById(final long id) {
         try {
             return queryForObject(
-                    "SELECT * FROM " + getTableName() + " WHERE id=?",
+                    String.format("SELECT * FROM %s WHERE id=?", getTableName()),
                     new Object[]{id},
                     getRowMapper()
             );
@@ -40,7 +40,7 @@ public abstract class AbstractPersistentEnumDaoImpl<T extends PersistentEnum> ex
     public T findByName(final String name) {
         try {
             return queryForObject(
-                    "SELECT * FROM " + getTableName() + " WHERE name=?",
+                    String.format("SELECT * FROM %s WHERE name=?", getTableName()),
                     new Object[]{name.toLowerCase()},
                     getRowMapper()
             );
@@ -51,7 +51,7 @@ public abstract class AbstractPersistentEnumDaoImpl<T extends PersistentEnum> ex
 
     @Override
     public List<T> findAll() {
-        return query("SELECT * FROM " + getTableName(), getRowMapper());
+        return query(String.format("SELECT * FROM %s", getTableName()), getRowMapper());
     }
 
     //-- Protected
