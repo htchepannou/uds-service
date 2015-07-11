@@ -10,6 +10,8 @@ import com.tchepannou.uds.dto.PermissionListResponse;
 import com.tchepannou.uds.dto.RoleListResponse;
 import com.tchepannou.uds.exception.NotFoundException;
 import com.tchepannou.uds.service.AuthorizationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 
 public class AuthorizationServiceImpl implements AuthorizationService {
     //-- Attributes
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorizationServiceImpl.class);
+
     @Autowired
     private DomainUserDao domainUserDao;
 
@@ -75,15 +79,24 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             final long roleId
     ) {
         try {
+
             DomainUser domainUser = new DomainUser(domainId, userId, roleId);
             domainUserDao.create(domainUser);
-        } catch (DuplicateKeyException e) { // NOSONAR
+
+        } catch (DuplicateKeyException e) {
+
+            LOG.warn("Permission already granted. domain={}, user={}, role={}", domainId, userId, roleId, e);
+
         } catch (DataIntegrityViolationException e) {
-            ArrayList<Long> keys = new ArrayList<>();
+
+            LOG.warn("Cannot grant again permission. domain={}, user={}, role={}", domainId, userId, roleId, e);
+
+            List<Long> keys = new ArrayList<>();
             keys.add(domainId);
             keys.add(userId);
             keys.add(roleId);
-            throw new NotFoundException(keys, DomainUser.class);
+            throw new NotFoundException((ArrayList)keys, DomainUser.class);
+
         }
     }
 
