@@ -79,8 +79,8 @@ public class UserServiceImpl implements UserService {
             userDao.update(user);
 
             return toUserResponse(user, status, statusCode);
-        } catch (DuplicateKeyException e){  // NOSONAR
-            throw new DuplicateLoginException(request.getLogin());
+        } catch (DuplicateKeyException e){
+            throw new DuplicateLoginException(request.getLogin(), e);
         }
     }
 
@@ -103,8 +103,8 @@ public class UserServiceImpl implements UserService {
             user.setLogin(login);
             userDao.update(user);
             return toUserResponse(user);
-        } catch (DuplicateKeyException e){  // NOSONAR
-            throw new DuplicateLoginException(login);
+        } catch (DuplicateKeyException e){
+            throw new DuplicateLoginException(login, e);
         }
     }
 

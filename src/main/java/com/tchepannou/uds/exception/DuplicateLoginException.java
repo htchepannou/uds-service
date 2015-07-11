@@ -8,4 +8,7 @@ public class DuplicateLoginException extends RuntimeException{
     public DuplicateLoginException(String name) {
         super (name);
     }
+    public DuplicateLoginException(String name, Throwable cause) {
+        super (name, cause);
+    }
 }

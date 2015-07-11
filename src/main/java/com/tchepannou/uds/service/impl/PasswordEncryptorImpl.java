@@ -3,6 +3,8 @@ package com.tchepannou.uds.service.impl;
 import com.tchepannou.uds.domain.User;
 import com.tchepannou.uds.service.PasswordEncryptor;
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,6 +13,7 @@ import java.util.Random;
 
 public class PasswordEncryptorImpl implements PasswordEncryptor {
     //-- Attributes
+    private static final Logger LOG = LoggerFactory.getLogger(PasswordEncryptorImpl.class);
     private static final String HASH_ALGO = "MD5";
 
     //-- PasswordEncryptor overrides
@@ -58,7 +61,8 @@ public class PasswordEncryptorImpl implements PasswordEncryptor {
             // If the computed computeHash matches the specified computeHash,
             // the plain text value must be correct.
             return storedHashedPassword.equals(expectedHashString);
-        } catch (NoSuchAlgorithmException e) {  // NOSONAR
+        } catch (NoSuchAlgorithmException e) {
+            LOG.warn(HASH_ALGO + " not supported", e);
             return false;
         }
     }
