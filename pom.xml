@@ -45,6 +45,17 @@
             <groupId>com.tchepannou.core.domain</groupId>
             <artifactId>core-domain</artifactId>
             <version>1.0</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-test</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.validation</groupId>
+                    <artifactId>validation-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- ==== springboot ===== -->
