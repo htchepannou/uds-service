@@ -1,5 +1,7 @@
 package com.tchepannou.uds.domain;
 
+import com.tchepannou.core.domain.Persistent;
+
 import java.util.Date;
 
 public class AccessToken extends Persistent {

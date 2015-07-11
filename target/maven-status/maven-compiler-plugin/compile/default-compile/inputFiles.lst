@@ -1,6 +1,5 @@
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/impl/UserStatusDaoImpl.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/domain/UserStatusCode.java
-/Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/AbstractPersistentEnumDao.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dto/AccessTokenResponse.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/config/AppConfig.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/service/impl/AuthorizationServiceImpl.java
@@ -10,10 +9,8 @@
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/domain/UserStatus.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/exception/DuplicateLoginException.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/UserStatusCodeDao.java
-/Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/impl/AbstractPersistentEnumDaoImpl.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dto/UserResponse.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/impl/AccessTokenDaoImpl.java
-/Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/domain/PersistentEnum.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/impl/RoleDaoImpl.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/service/UserStatusCodeService.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/impl/DomainDaoImpl.java
@@ -48,7 +45,6 @@
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/config/MetricsConfig.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/DomainDao.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dto/DomainRequest.java
-/Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/domain/Persistent.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/PermissionDao.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dao/RoleDao.java
 /Users/htchepannou/Perso/uds-service/src/main/java/com/tchepannou/uds/dto/UserStatusCodeResponse.java

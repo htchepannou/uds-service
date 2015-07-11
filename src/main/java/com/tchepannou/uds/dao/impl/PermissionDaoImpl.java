@@ -1,5 +1,6 @@
 package com.tchepannou.uds.dao.impl;
 
+import com.tchepannou.core.dao.impl.AbstractPersistentEnumDaoImpl;
 import com.tchepannou.uds.dao.PermissionDao;
 import com.tchepannou.uds.domain.Permission;
 

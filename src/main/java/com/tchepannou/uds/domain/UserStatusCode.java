@@ -1,5 +1,7 @@
 package com.tchepannou.uds.domain;
 
+import com.tchepannou.core.domain.PersistentEnum;
+
 public class UserStatusCode extends PersistentEnum {
     private boolean active;
     private boolean defaultStatus;

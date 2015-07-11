@@ -41,6 +41,12 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.tchepannou.core.domain</groupId>
+            <artifactId>core-domain</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- ==== springboot ===== -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

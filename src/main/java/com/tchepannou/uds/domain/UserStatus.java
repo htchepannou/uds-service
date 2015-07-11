@@ -1,8 +1,10 @@
 package com.tchepannou.uds.domain;
 
+import com.tchepannou.core.domain.Persistent;
+
 import java.util.Date;
 
-public class UserStatus extends Persistent{
+public class UserStatus extends Persistent {
     //-- Attribute
     private long userId;
     private long statusCodeId;
