@@ -8,11 +8,14 @@ import com.tchepannou.uds.domain.Permission;
 import com.tchepannou.uds.domain.Role;
 import com.tchepannou.uds.dto.PermissionListResponse;
 import com.tchepannou.uds.dto.RoleListResponse;
+import com.tchepannou.uds.exception.NotFoundException;
 import com.tchepannou.uds.service.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +78,12 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             DomainUser domainUser = new DomainUser(domainId, userId, roleId);
             domainUserDao.create(domainUser);
         } catch (DuplicateKeyException e) { // NOSONAR
+        } catch (DataIntegrityViolationException e) {
+            ArrayList<Long> keys = new ArrayList<>();
+            keys.add(domainId);
+            keys.add(userId);
+            keys.add(roleId);
+            throw new NotFoundException(keys, DomainUser.class);
         }
     }
 
