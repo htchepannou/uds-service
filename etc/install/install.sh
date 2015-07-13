@@ -1,10 +1,10 @@
 #!/bin/sh
 
 #
-# Usage: ./install.sh <app-name> <profile>
+# Usage: ./install.sh <profile>
 #
 
-if [ $# -ne 2 ];then
+if [ $# -ne 1 ];then
     echo "Install failed! Illegal number of parameters"
     echo "Usage: ./install.sh <spring-profile>"
     exit 1
