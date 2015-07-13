@@ -38,6 +38,11 @@
             <name>oss-jfrog-artifactory-releases</name>
             <url>http://oss.jfrog.org/artifactory/oss-release-local</url>
         </repository>
+        <repository>
+            <id>maven-s3-release-repo</id>
+            <name>S3 Release Repository</name>
+            <url>s3://maven.com.tchepannou/release</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -410,4 +415,18 @@
             </build>
         </profile>
     </profiles>
+
+
+    <distributionManagement>
+        <repository>
+            <id>maven-s3-release-repo</id>
+            <name>S3 Release Repository</name>
+            <url>s3://maven.com.tchepannou/release</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-s3-snapshot-repo</id>
+            <name>S3 Snapshot Repository</name>
+            <url>s3://maven.com.tchepannou/snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
