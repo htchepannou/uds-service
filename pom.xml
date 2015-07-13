@@ -204,9 +204,18 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <classifier>exec</classifier>
+                    <finalName>${project.name}.${project.packaging}</finalName>
                 </configuration>
             </plugin>
 
+
+            <!-- ====== Packaging ======= -->
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warName>${project.name}.${project.packaging}</warName>
+                </configuration>
+            </plugin>
 
             <!-- ======== UnitTest ========== -->
             <plugin>
@@ -341,32 +350,6 @@
                         <goals>
                             <goal>migrate</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- ==== Packages ====== -->
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>rename-artifact</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <copy
-                                        tofile="target/${project.name}.${project.packaging}"
-                                        file="target/${project.name}-${project.version}.${project.packaging}"
-                                />
-                                <copy
-                                        tofile="target/${project.name}-exec.${project.packaging}"
-                                        file="target/${project.name}-${project.version}-exec.${project.packaging}"
-                                />
-                            </tasks>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
