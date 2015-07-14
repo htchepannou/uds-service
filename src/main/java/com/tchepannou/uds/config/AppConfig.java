@@ -7,6 +7,7 @@ import com.tchepannou.uds.service.impl.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -38,6 +39,7 @@ public class AppConfig {
 
 
     @Bean
+    @Primary
     public DataSource dataSource (){
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setUsername(username);
