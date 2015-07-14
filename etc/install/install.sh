@@ -1,16 +1,10 @@
 #!/bin/sh
 
 #
-# Usage: ./install.sh <profile>
+# Usage: ./install.sh
 #
 
-if [ $# -ne 1 ];then
-    echo "Install failed! Illegal number of parameters"
-    echo "Usage: ./install.sh <spring-profile>"
-    exit 1
-fi
-
-PROFILE=$1
+APP=uds-service
 
 # Install application
 if [ ! -d "/opt/$APP" ]; then
@@ -21,12 +15,14 @@ if [ ! -d "/opt/$APP/log" ]; then
   mkdir /opt/$APP/log
 fi
 
-chown -R $APP_USER:$APP_GROUP /opt/$APP
-
-
-# /etc/init.d
-cat initd.sh | sed -e "s/__ACTIVE_PROFILE__/$PROFILE/" > /etc/init.d/$APP
-
+# startup script
+cp initd.sh /etc/init.d/$APP
 chmod +x /etc/init.d/$APP
+
+/sbin/chkconfig --add $APP
+/sbin/chkconfig $APP on
+
+# application
+cp $APP-exec.jar /opt/$APP/.
 
 /etc/init.d/$APP restart
