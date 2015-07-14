@@ -101,4 +101,137 @@
       <index name="name" unique="true" columns="name"/>
     </table>
   </data-source>
+  <data-source name="MySQL - uds@uds-test.cebrkd9gbkvm.us-west-2.rds.amazonaws.com" uuid="099b539b-0f90-48e8-9697-af3fcd331c24">
+    <database-info product="MySQL" version="5.6.23-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <schema name="" catalog="innodb"/>
+  </data-source>
+  <data-source name="MySQL - uds@uds-test.cebrkd9gbkvm.us-west-2.rds.amazonaws.com [2]" uuid="69501d6c-a78b-4977-985c-078720c5e8f4">
+    <database-info product="MySQL" version="5.6.23-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <schema name="" catalog="uds"/>
+    <table name="schema_version" schema="" catalog="uds" type="TABLE">
+      <column name="version_rank" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="installed_rank" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="version" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="description" sqlType="VARCHAR" precision="200" scale="0" nullable="false" jdbcType="12"/>
+      <column name="type" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="script" sqlType="VARCHAR" precision="1000" scale="0" nullable="false" jdbcType="12"/>
+      <column name="checksum" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="installed_by" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <column name="installed_on" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
+      <column name="execution_time" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="success" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <primary-key name="PRIMARY" columns="version"/>
+      <index name="schema_version_ir_idx" unique="false" columns="installed_rank"/>
+      <index name="schema_version_s_idx" unique="false" columns="success"/>
+      <index name="schema_version_vr_idx" unique="false" columns="version_rank"/>
+    </table>
+    <table name="t_access_token" schema="" catalog="uds" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="user_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="domain_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="from_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="to_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="expiry_date" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="expired" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7"/>
+      <column name="user_agent" sqlType="VARCHAR" precision="2048" scale="0" nullable="true" jdbcType="12"/>
+      <column name="remote_ip" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="fk_access_token__domain" columns="domain_fk" ref-table="t_domain" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_access_token__user" columns="user_fk" ref-table="t_user" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_access_token__domain" unique="false" columns="domain_fk"/>
+      <index name="fk_access_token__user" unique="false" columns="user_fk"/>
+    </table>
+    <table name="t_domain" schema="" catalog="uds" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="deleted" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <column name="from_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="to_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="description" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="fk_access_token__domain" table="t_access_token" schema="" catalog="uds" columns="domain_fk"/>
+      <exported-key name="fk_domain_user__domain" table="t_domain_user" schema="" catalog="uds" columns="domain_fk"/>
+      <index name="name" unique="true" columns="name"/>
+    </table>
+    <table name="t_domain_user" schema="" catalog="uds" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="domain_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="user_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="role_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="from_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="fk_domain_user__domain" columns="domain_fk" ref-table="t_domain" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_domain_user__role" columns="role_fk" ref-table="t_role" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_domain_user__user" columns="user_fk" ref-table="t_user" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="domain_fk" unique="true" columns="user_fk,role_fk"/>
+      <index name="fk_domain_user__role" unique="false" columns="role_fk"/>
+      <index name="fk_domain_user__user" unique="false" columns="user_fk"/>
+    </table>
+    <table name="t_permission" schema="" catalog="uds" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="fk_role_permission__permission" table="t_role_permission" schema="" catalog="uds" columns="permission_fk"/>
+    </table>
+    <table name="t_role" schema="" catalog="uds" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="fk_domain_user__role" table="t_domain_user" schema="" catalog="uds" columns="role_fk"/>
+      <exported-key name="fk_role_permission__role" table="t_role_permission" schema="" catalog="uds" columns="role_fk"/>
+      <index name="name" unique="true" columns="name"/>
+    </table>
+    <table name="t_role_permission" schema="" catalog="uds" type="TABLE">
+      <column name="role_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="permission_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <primary-key name="PRIMARY" columns="role_fk,permission_fk"/>
+      <foreign-key name="fk_role_permission__permission" columns="permission_fk" ref-table="t_permission" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_role_permission__role" columns="role_fk" ref-table="t_role" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_role_permission__permission" unique="false" columns="permission_fk"/>
+    </table>
+    <table name="t_user" schema="" catalog="uds" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="party_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="deleted" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <column name="from_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="to_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="login" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <column name="password" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="status_fk" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="fk_access_token__user" table="t_access_token" schema="" catalog="uds" columns="user_fk"/>
+      <exported-key name="fk_domain_user__user" table="t_domain_user" schema="" catalog="uds" columns="user_fk"/>
+      <exported-key name="fk_user_status__user" table="t_user_status" schema="" catalog="uds" columns="user_fk"/>
+      <index name="login" unique="true" columns="login"/>
+    </table>
+    <table name="t_user_status" schema="" catalog="uds" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="user_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="status_code_fk" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="status_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="comment" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="fk_user_status__status_code" columns="status_code_fk" ref-table="t_user_status_code" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_user_status__user" columns="user_fk" ref-table="t_user" ref-schema="" ref-catalog="uds" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_user_status__status_code" unique="false" columns="status_code_fk"/>
+      <index name="fk_user_status__user" unique="false" columns="user_fk"/>
+    </table>
+    <table name="t_user_status_code" schema="" catalog="uds" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <column name="active" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7"/>
+      <column name="default_status" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="fk_user_status__status_code" table="t_user_status" schema="" catalog="uds" columns="status_code_fk"/>
+      <index name="name" unique="true" columns="name"/>
+    </table>
+  </data-source>
 </component>
