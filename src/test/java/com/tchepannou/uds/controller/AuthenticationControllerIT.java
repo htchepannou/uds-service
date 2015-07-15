@@ -62,8 +62,8 @@ public class AuthenticationControllerIT {
             .body("domainId", is(100))
             .body("userId", is(100))
             .body("expired", is(false))
-            .body("fromDate", is("1973-12-27 10:30:45 -0500"))
-            .body("expiryDate", is("2020-12-27 10:30:45 -0500"))
+            .body("fromDate", startsWith("1973-12-27 10:30:45"))
+            .body("expiryDate", startsWith("2020-12-27 10:30:45"))
         ;
         // @formatter:on
     }

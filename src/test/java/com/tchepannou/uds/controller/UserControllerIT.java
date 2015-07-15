@@ -10,6 +10,7 @@ import com.tchepannou.uds.dto.CreateUserRequest;
 import com.tchepannou.uds.dto.UserStatusRequest;
 import com.tchepannou.uds.service.PasswordEncryptor;
 import org.apache.http.HttpStatus;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +27,7 @@ import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -85,13 +87,13 @@ public class UserControllerIT {
             .body("partyId", is(100))
             .body("login", is("ray.sponsible"))
             .body("password", nullValue())
-            .body("fromDate", is("1973-12-27 10:30:45 -0500"))
+            .body("fromDate", startsWith("1973-12-27 10:30:45"))
             .body("toDate", nullValue())
             .body("status.id", is(101))
             .body("status.statusCode", is(1))
             .body("status.statusText", is("new"))
             .body("status.comment", is("Initial"))
-            .body("status.date", is("1973-12-27 10:30:45 -0500"))
+            .body("status.date", Matchers.startsWith("1973-12-27 10:30:45"))
         ;
         // @formatter:on
     }
@@ -221,12 +223,12 @@ public class UserControllerIT {
             .body("partyId", is(600))
             .body("login", is(login))
             .body("password", nullValue())
-            .body("fromDate", is("1973-12-27 10:30:45 -0500"))
+            .body("fromDate", startsWith("1973-12-27 10:30:45"))
             .body("toDate", nullValue())
             .body("status.statusCode", is(2))
             .body("status.statusText", is("active"))
             .body("status.comment", is("Activated"))
-            .body("status.date", is("1973-12-27 10:30:45 -0500"))
+            .body("status.date", startsWith("1973-12-27 10:30:45"))
         ;
         // @formatter:on
     }
@@ -359,7 +361,7 @@ public class UserControllerIT {
             .body("partyId", is(1100))
             .body("login", is("ray1100.sponsible"))
             .body("password", nullValue())
-            .body("fromDate", is("1973-12-27 10:30:45 -0500"))
+            .body("fromDate", startsWith("1973-12-27 10:30:45"))
             .body("status.id", greaterThan(101))
             .body("status.statusCode", is(2))
             .body("status.statusText", is("active"))
