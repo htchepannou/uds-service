@@ -48,4 +48,5 @@ public class UserStatusCodeResponse {
             this.role = role;
             return this;
         }
-    }}
+    }
+}

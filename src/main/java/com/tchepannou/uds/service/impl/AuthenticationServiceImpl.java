@@ -59,25 +59,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Transactional
     public AccessTokenResponse login(final LoginRequest request) {
         /* Authenticate */
-        User user = userDao.findByLogin(request.getLogin());
-        if (user == null || user.isDeleted()){
-            throw new AuthFailedException("User{" + request.getLogin() + " not found");
-        }
-        if (!passwordEncryptor.matches(request.getPassword(), user)){
-            throw new AuthFailedException("Password mismatch");
-        }
-
-        /* make sure account is active */
-        UserStatusCode statusCode = userStatusCodeDao.findByUser(user.getId());
-        if (statusCode == null || !statusCode.isActive()){
-            throw new AccountNotActiveException("User's status is not active. status=" + statusCode);
-        }
-
-        /* Make sure user as access to domain */
-        List<DomainUser> domainUsers = domainUserDao.findByDomainByUser(request.getDomainId(), user.getId());
-        if (domainUsers.isEmpty()){
-            throw new AccessDeniedException(user + " doesn't have access to Domain{id=" + request.getDomainId() + "}");
-        }
+        User user = authenticate(request);
+        checkAccess(user, request);
 
         /* Create access token */
         AccessToken token = createAccessToken(request, user);
@@ -118,6 +101,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         token.setExpiryDate(DateUtils.addMinutes(now, ttl));
 
         return token;
+    }
+
+    private User authenticate(final LoginRequest request) {
+        User user = userDao.findByLogin(request.getLogin());
+        if (user == null || user.isDeleted()){
+            throw new AuthFailedException("User{" + request.getLogin() + " not found");
+        }
+        if (!passwordEncryptor.matches(request.getPassword(), user)){
+            throw new AuthFailedException("Password mismatch");
+        }
+        return user;
+    }
+
+    private void checkAccess(User user, LoginRequest request) {
+        /* make sure account is active */
+        UserStatusCode statusCode = userStatusCodeDao.findByUser(user.getId());
+        if (statusCode == null || !statusCode.isActive()){
+            throw new AccountNotActiveException("User's status is not active. status=" + statusCode);
+        }
+
+        /* Make sure user as access to domain */
+        List<DomainUser> domainUsers = domainUserDao.findByDomainByUser(request.getDomainId(), user.getId());
+        if (domainUsers.isEmpty()){
+            throw new AccessDeniedException(user + " doesn't have access to Domain{id=" + request.getDomainId() + "}");
+        }
     }
 
 }
